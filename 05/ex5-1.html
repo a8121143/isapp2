@@ -23,7 +23,7 @@
             html = html + '<ul>';
             for (var i = 0; i < objects.length; i++) {
                 var object = objects[i];
-                html = html + '<li>' + object.name + ',' + object.tweet + ',' + object.time + '</li>';
+                html = html + '<li>' + object.id + ',' + object.name + ',' + object.tweet + ',' + object.time + '</li>';
             }
             html = html + '</ul>';
             document.getElementById('result').innerHTML = html;
@@ -33,7 +33,7 @@
 </head>
 
 <body>
-    <h1>tweet</h1>
+    <h1>Tweets</h1>
     <button onclick="button1Pressed()">X</button>
     <hr>
     <p id="result">xxxx</p>
