@@ -16,6 +16,7 @@
         }
 
         async function doInsert() {
+            
             var userid = document.getElementById('tf1').value;
             var tweet = document.getElementById('tf2').value;
 
@@ -23,7 +24,11 @@
             var objects = await osql.connect(sql);
             console.log(objects);
 
+            
             document.getElementById('result').innerHTML = "tweetしました";
+            document.getElementById('tf1').value = "";  //tweetの中身を空にした。
+            document.getElementById('tf2').value = "";  //tweetの中身を空にした。
+            
         }
     </script>
 
@@ -32,9 +37,9 @@
 <body>
     <h1>Tweets</h1>
     <br>
-    名前:<input id="tf1" value="名無し" type="textfield">
+    名前:<input id="tf1"  type="textfield">     
     <br>
-    tweet:<input id="tf2" type="textfield">
+    tweet:<input id="tf2"  type="textfield">
     <button onclick="button1Pressed()">tweet</button>
     <br>
     <p id="result"></p>
