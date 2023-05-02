@@ -19,22 +19,25 @@
         
 
         async function doSelect() {
-            var sql = 'select * from Tweets order by time desc limit 20';
+            var x = document.getElementById('tf1').value;   //xにテキストフィールドの値を取得する
+            //var sql = 'select * from Tweets where tweet like "%x%"';     //xになっちゃう
+            var sql = `select * from Tweets where tweet like "${x}"`;         //sqlの文をLIKE文にしたエラー出てる
             var objects = await osql.connect(sql);
             console.log(objects);
+
             var html = '';
             html = html + '<ul>';
-            var x = document.getElementById('tf1').value;   //テキストフィールドの値を取得する
-            
-             for (var i = 0; i < objects.length; i++) {
+            for (var i = 0; i < objects.length; i++) {
                 var object = objects[i];
                 
-                 html = html + '<li>' + object.id + ',' + object.name + ',' + object.tweet + '</li>';
-                }
+                html = html + '<li>' + object.tweet +'</li>';
+                
+            }
             
             html = html + '</ul>';
+            
             document.getElementById('result').innerHTML = html;
-        }
+        }     
     </script>
 
 </head>
@@ -42,10 +45,11 @@
 <body>
     <h1>Tweets</h1>
     <br>
-    検索内容:<input id="tf1" type="textfield">
-    <br>
-    <button onclick="button1Pressed()">検索</button>
-    <p id="result">xxxx</p>
+    検索内容:<input id="tf1" type="text">     
+    <br>   
+    <button onclick="button1Pressed()">検索</button>     
+    <p id="result"></p>
+    
 </body>
 
 </html>
