@@ -21,7 +21,7 @@
         async function doSelect() {
             var x = document.getElementById('tf1').value;   //xにテキストフィールドの値を取得する
             //var sql = 'select * from Tweets where tweet like "%x%"';     //xになっちゃう
-            var sql = `select * from Tweets where tweet like "${x}"`;         //sqlの文をLIKE文にしたエラー出てる
+            var sql = `select * from Tweets where tweet like "${x}"`;         //sqlの文をLIKE文に。``(バッククオート)を使うことがポイント。
             var objects = await osql.connect(sql);
             console.log(objects);
 
