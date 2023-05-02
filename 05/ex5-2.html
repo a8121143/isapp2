@@ -11,13 +11,39 @@
     <script>
         osql.requireLogin();//すべてのページに入れる．google認証をして，osql.connect()や，osql.getMe()を使えるようにしてくれる．
 
-        function button1Pressed() {
+        function button1Pressed() {                          //ex5-1-2の検索機能とツイート表示機能
+            doSelect();
+        }
+        
+        
+        function button2Pressed() {                         //ex5-2のツイート機能
             doInsert();
+        }
+
+        async function doSelect() {
+            var x = document.getElementById('tf1').value;   //xにテキストフィールドの値を取得する
+            //var sql = 'select * from Tweets where tweet like "%x%"';     //xになっちゃう
+            var sql = `select * from Tweets where tweet like "%${(x)}%"`;         //sqlの文をLIKE文に。``(バッククオート)を使うことがポイント。
+            var objects = await osql.connect(sql);
+            console.log(objects);
+
+            var html = '';
+            html = html + '<ul>';
+            for (var i = 0; i < objects.length; i++) {
+                var object = objects[i];
+                
+                html = html + '<li>' + object.tweet +'</li>';
+                
+            }
+            
+            html = html + '</ul>';
+            
+            document.getElementById('result').innerHTML = html;
         }
 
         async function doInsert() {
             
-            var userid = document.getElementById('tf1').value;
+            var userid = document.getElementById('tf3').value;
             var tweet = document.getElementById('tf2').value;
 
             var sql = `insert into Tweets (name, tweet, time) values("${userid}", "${tweet}", now());`;
@@ -26,7 +52,7 @@
 
             
             document.getElementById('result').innerHTML = "tweetしました";
-            document.getElementById('tf1').value = "";  //tweetの中身を空にした。
+            document.getElementById('tf3').value = "";  //tweetの中身を空にした。
             document.getElementById('tf2').value = "";  //tweetの中身を空にした。
             
         }
@@ -35,12 +61,17 @@
 </head>
 
 <body>
+
     <h1>Tweets</h1>
     <br>
-    名前:<input id="tf1"  type="textfield">     
+    検索内容:<input id="tf1" type="text">     
+    <button onclick="button1Pressed()">検索</button>     
+    <br>
+    <hr>
+    名前:<input id="tf3"  type="textfield">     
     <br>
     tweet:<input id="tf2"  type="textfield">
-    <button onclick="button1Pressed()">tweet</button>
+    <button onclick="button2Pressed()">tweet</button>
     <br>
     <p id="result"></p>
 </body>
