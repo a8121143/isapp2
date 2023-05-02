@@ -11,16 +11,34 @@
     <script>
         osql.requireLogin();//すべてのページに入れる．google認証をして，osql.connect()や，osql.getMe()を使えるようにしてくれる．
 
-        function button1Pressed() {                          //ex5-1-2の検索機能とツイート表示機能
-            doSelect();
+
+        function buttonranPressed(){                          //ex5-1-1のツイート表示
+            doselect511();
+
+        }
+        function buttonkenPressed() {                          //ex5-1-2の検索機能と検索内容に関連したツイート表示機能
+            doSelect512();
         }
         
         
-        function button2Pressed() {                         //ex5-2のツイート機能
-            doInsert();
+        function buttonbunPressed() {                         //ex5-2-1のツイート機能名前とツイート内容＆ツイートしたら消える(tweetしました)
+            doInsert521();
         }
 
-        async function doSelect() {
+        async function doselect511(){
+            var sql ='select * from Tweets order by time desc limit 20';
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            var html = '';
+            html = html + '<ul>';
+                for (var i =0; i< objects.length;i++){
+                    var object = objects[i];
+                    html =html + '<li>' +object.id + ',' + object.name + ',' + object.tweet + ',' + object.time + '</li>';
+                }
+                html = html + '</ul>';
+                document.getElementById('result').innerHTML = html;
+        }
+        async function doSelect512() {
             var x = document.getElementById('tf1').value;   //xにテキストフィールドの値を取得する
             //var sql = 'select * from Tweets where tweet like "%x%"';     //xになっちゃう
             var sql = `select * from Tweets where tweet like "%${(x)}%"`;         //sqlの文をLIKE文に。``(バッククオート)を使うことがポイント。
@@ -32,7 +50,7 @@
             for (var i = 0; i < objects.length; i++) {
                 var object = objects[i];
                 
-                html = html + '<li>' + object.tweet +'</li>';
+                html = html + '<li>' + object.id + ',' + object.name + ',' + object.tweet + ',' + object.time  +'</li>';
                 
             }
             
@@ -41,7 +59,7 @@
             document.getElementById('result').innerHTML = html;
         }
 
-        async function doInsert() {
+        async function doInsert521() {
             
             var userid = document.getElementById('tf3').value;
             var tweet = document.getElementById('tf2').value;
@@ -51,7 +69,7 @@
             console.log(objects);
 
             
-            document.getElementById('result').innerHTML = "tweetしました";
+            document.getElementById('result1').innerHTML = "tweetしました";
             document.getElementById('tf3').value = "";  //tweetの中身を空にした。
             document.getElementById('tf2').value = "";  //tweetの中身を空にした。
             
@@ -61,19 +79,23 @@
 </head>
 
 <body>
-
+   
     <h1>Tweets</h1>
+    <button onclick="buttonranPressed()">X</button> 
+    <hr>
     <br>
     検索内容:<input id="tf1" type="text">     
-    <button onclick="button1Pressed()">検索</button>     
+    <button onclick="buttonkenPressed()">検索</button>     
     <br>
     <hr>
     名前:<input id="tf3"  type="textfield">     
     <br>
     tweet:<input id="tf2"  type="textfield">
-    <button onclick="button2Pressed()">tweet</button>
+    <button onclick="buttonbunPressed()">tweetする</button>
+    <p id="result1"></p>
     <br>
     <p id="result"></p>
+    
 </body>
 
 </html>
