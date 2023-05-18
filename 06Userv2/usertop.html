@@ -19,8 +19,21 @@
         function init(){
          
             var name=sessionStorage.getItem('username');
+
+            
             document.getElementById('welcome').innerHTML = 'ようこそ' + name + 'さん'
+            
+
+            var id=sessionStorage.getItem('userid');
+
+            document.getElementById('id').innerHTML = `<a href="update.html?userid=` + id + `">` + `ユーザー情報変更`;
+            
         }
+        
+  
+        
+
+        //ユーザトップ画面でようこそxx三のところにユーザ名が入るようにした。
 
         
     
@@ -30,11 +43,11 @@
 
 <body>
     <h1>ユーザトップ</h1>
-    <p id="welcome"></p>
-    
+    <p id="welcome">ようこそxxさん</p>
+    <p id="id"></p>
     <hr>
 
-    <li><a href="update.html">変更</a></li>
+    
 
 </body>
 
