@@ -41,7 +41,7 @@
         async function doDelete() {
             var userid = document.getElementById('tf4').value;   //useridにテキストフィールドの値を取得する
             
-            var sql = `delect * from Users where id = "${(userid)}"`;         //sqlの文をdeleteに。``(バッククオート)を使うことがポイント。
+            var sql = `delete  from Users where id = "${(userid)}"`;         //sqlの文をdeleteに。``(バッククオート)を使うことがポイント。
             var objects = await osql.connect(sql);
             console.log(objects);
             execSelect()
