@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="../lib/jquery.min.js"></script>
+    <script type="text/javascript" src="../lib/osql.js"></script>
+
+    <script>
+        osql.requireLogin();//すべてのページに入れる．google認証をして，osql.connect()や，osql.getMe()を使えるようにしてくれる．
+
+        $().ready(function () {                  //ツイートが2秒毎に更新されるようにした。
+            x = 0;
+            setInterval(buttonranPressed, 2000);           
+        });
+
+        $().ready(function () {   //ページを開いてすぐにinitを実行するようにした。
+            init();
+        });
+
+        async function init() {
+           
+           var userid = sessionStorage.getItem('userid');   //useridが自動的に入るようにした。
+           document.getElementById('tf2').value = userid
+
+        }
+
+         
+        function buttonbunPressed() {                         //ex5-2-1のツイート機能名前とツイート内容＆ツイートしたら消える(tweetしました)
+            doInsert521();
+        }
+
+        async function buttonranPressed() {
+            x++;
+            doselect511();
+        }
+        
+        
+    
+        function buttonkenPressed() {                          //ex5-1-2の検索機能と検索内容に関連したツイート表示機能
+            doSelect512();
+        }
+        
+        
+    
+
+        async function doselect511(){                      //ツイートが表示される
+            var sql ='select * from Tweets order by time desc limit 20';
+            var objects = await osql.connect(sql);
+            console.log(objects);
+            var html = '';
+            html = html + '<ul>';
+                for (var i =0; i< objects.length;i++){
+                    var object = objects[i];
+                    html =html + '<li>' +object.id + ',' + object.name + ',' + object.tweet + ',' + object.time + '</li>';
+                }
+                html = html + '</ul>';
+                document.getElementById('result').innerHTML = html;
+        }
+
+        async function doSelect512() {      //検索機能と検索内容に関連したツイート表示機能
+            var x = document.getElementById('tf1').value;   //xにテキストフィールドの値を取得する
+            //var sql = 'select * from Tweets where tweet like "%x%"';     //xになっちゃう
+            var sql = `select * from Tweets where tweet like "%${(x)}%"`;         //sqlの文をLIKE文に。``(バッククオート)を使うことがポイント。
+            var objects = await osql.connect(sql);
+            console.log(objects);
+
+            var html = '';
+            html = html + '<ul>';
+            for (var i = 0; i < objects.length; i++) {
+                var object = objects[i];
+                
+                html = html + '<li>' + object.id + ',' + object.name + ',' + object.tweet + ',' + object.time  +'</li>';
+                
+            }
+            
+            html = html + '</ul>';
+            
+            document.getElementById('result').innerHTML = html;
+        }
+
+        async function doInsert521() {
+           
+            //var userid = sessionStorage.getItem('userid');   //useridを自動に持ってくるように設定しているのでここだと遅い。
+
+
+            var tweet = document.getElementById('tf3').value;
+
+            var sql = `insert into Tweets (name, tweet, time) values("${userid}", "${tweet}", now());`;
+            var objects = await osql.connect(sql);
+            console.log(objects);
+
+            
+            document.getElementById('result1').innerHTML = "tweetしました";
+            //var userid = document.getElementById('tf2').value = "";  //idの中身を空にした。
+            document.getElementById('tf3').value = "";  //tweetの中身を空にした。
+            
+        }
+
+    
+        
+    
+    </script>
+
+</head>
+
+<body>
+   
+    <h1>Tweets</h1>
+    
+    <hr>
+    
+    検索内容:<input id="tf1" type="text">     
+    <button onclick="buttonkenPressed()">検索</button>     
+    <br>
+    <hr>
+    名前:<input id="tf2" value="" type="textfield" disabled>  
+    <br>
+    tweet:<input id="tf3"  type="textfield">
+    <button onclick="buttonbunPressed()">tweetする</button>
+    <hr>
+    <p id="result1"></p>
+    <br>
+    <p id="result"></p>
+    
+</body>
+
+</html>
